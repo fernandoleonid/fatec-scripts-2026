@@ -51,8 +51,8 @@ cat > "$NAMED_OPTIONS" <<EOF
 options {
     directory "/var/cache/bind";
     listen-on { ${DNS_SERVER_IP}; 127.0.0.1; };
-    allow-query { ${NETWORK}/${NETMASK}; localhost; };
-    allow-recursion { ${NETWORK}/${NETMASK}; localhost; };
+    allow-query { ${NETWORK}/24; localhost; };
+    allow-recursion { ${NETWORK}/24; localhost; };
     forwarders {
         ${DNS_FORWARDER};
     };
@@ -148,7 +148,7 @@ chmod 640 "$ZONE_FILE" "$REVERSE_ZONE_FILE"
 echo "==> Reiniciando serviço de rede..."
 systemctl restart networking.service
 echo "==> Validando configuração do BIND9..."
-named-checkconf "$NAMED_OPTIONS"
+named-checkconf
 named-checkzone "${DOMAIN}" "$ZONE_FILE"
 named-checkzone "0.168.192.in-addr.arpa" "$REVERSE_ZONE_FILE"
 echo "==> Habilitando e reiniciando servidor DNS..."
@@ -168,7 +168,7 @@ EOF
 echo ""
 echo "==> Configuração concluída."
 echo "    Interface: ${IF_LAN}"
-echo "    Servidor DNS: ${DNS_SERVER_IP}/${NETMASK}"
+echo "    Servidor DNS: ${DNS_SERVER_IP}/24"
 echo "    Domínio configurado: ${DOMAIN}"
 echo "    www.${DOMAIN} -> ${WWW_IP}"
 echo "    dhcp.${DOMAIN} -> ${DHCP_SERVER_IP}"
