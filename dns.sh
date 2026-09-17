@@ -38,7 +38,6 @@ iface ${IF_LAN} inet static
 address ${DNS_SERVER_IP}
 netmask ${NETMASK}
 gateway ${FIREWALL_IP}
-dns-nameservers ${DNS_SERVER_IP} ${DNS_FORWARDER}
 EOF
 
 # 3. Configurando o BIND9 - Opções globais
